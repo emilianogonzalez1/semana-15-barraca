@@ -1,0 +1,14 @@
+#navbar{
+    background-color: greenyellow;
+}
+
+#card{
+    display: inline-block;
+}
+
+.bi-trash{
+    cursor: pointer;
+}
+i:hover{
+    color: red;
+}

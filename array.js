@@ -182,7 +182,7 @@ productos.forEach(element => {
     </div>
     <ul class="list-group list-group-flush">
       <li class="list-group-item">Precio: $${element.precio}</li>
-      <li class="list-group-item">Stock:${element.stock}</li>
+      <li class="list-group-item">Stock: <span id="stock-${element.id}">${element.stock}</span></li>
     </ul>
     <div class="card-body">
       <button id="comprar" type="submit" class="btn btn-dark"  onclick="agregarCarrito(${element.id})">Añadir al carrito</button>
@@ -205,6 +205,9 @@ function agregarObjeto(objeto) {
 }              
 
 function agregarCarrito(id){
+  const stock = document.querySelector('#stock-' + id);
+  const stockString = stock.textContent;
+  const stockNum = parseInt(stockString);
   const articles = 
           {
               "id": productos[id - 1].id,
@@ -213,7 +216,10 @@ function agregarCarrito(id){
               "unitCost": productos[id - 1].precio,
               "imagen": productos[id - 1].imagen
           };
-  console.log(articles)
+  console.log(stockNum)
+  console.log(productos[id - 1].id)
+  console.log(stock)
+  stock.textContent = stockNum - 1;
   agregarObjeto(articles)
 
   localStorage.setItem('productosCarrito', JSON.stringify(arregloProductos))

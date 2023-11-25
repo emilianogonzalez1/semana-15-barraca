@@ -11,7 +11,7 @@ JSON.parse(arrayProductos).forEach(element => {
         <th scope="row"><img class="img-fluid" src="${element.imagen}" alt="" style="width: 3rem;"></th>
         <td>${element.nombre}</td>
         <td>$${element.unitCost}</td>
-        <td class="w-25"><input id="${element.id}" class="p-1" type="number" min="1" value="${element.count}" style="width: 3rem;" onchange="actualizarSubtotal(${element.id})"></td>
+        <td class="w-1"><input id="${element.id}" class="p-1" type="number" min="1" value="${element.count}" style="width: 3rem;" onchange="actualizarSubtotal(${element.id})"></td>
         <td id="subtotal_${element.id}" class="subtotal">$${element.unitCost * element.count}</td>
         <td><i class="${element.id} bi bi-trash" onclick="borrar(this)"></i></td>
     </tr>
@@ -74,18 +74,23 @@ function prcEnvio(){
     if (debito.checked){
        costoEnvio.innerHTML = `$0`         
     } else if (efectivo.checked){
-        costoEnvio.innerHTML = `$ ${Math.trunc(total / 10 )}`
+        costoEnvio.innerHTML = `$${Math.trunc(total / 10 )}`
     } else if (credito.checked) {
-        costoEnvio.innerHTML = `$ ${Math.trunc(total * 0.05)}`
+        costoEnvio.innerHTML = `$${Math.trunc(total * 0.07)}`
     }
 }
  
 function totalTotal() {
+    const efectivo = document.getElementById("option2")
     const num1 = parseInt(subtotalTotal.textContent.slice(1));
     const num2 = parseInt(costoEnvio.textContent.slice(1));
-
-    let sumaTotal = num1 + num2;
-
+    let sumaTotal = 0;
+    if(efectivo.checked){
+        sumaTotal = num1 - num2 ;
+    }
+    else{
+        sumaTotal = num1 + num2;
+    }
     totalCompra.innerHTML = `$${sumaTotal}`;
 }
 
@@ -95,6 +100,26 @@ tiposEnvio.forEach(envio => {
     envio.addEventListener("click", () => {
         prcEnvio();
         totalTotal();
-        console.log('mano aca tambien')
     })
+})
+
+
+const btnCompra = document.querySelector('#boton-compra');
+
+btnCompra.addEventListener('click', ()=>{
+    const alertSuccess = document.querySelector('#alertSuccess');
+    const alertDanger = document.querySelector('#alertDanger')
+    const aPagar = document.querySelector('.totalPagar');
+    const compra = parseInt(totalCompra.textContent.slice(1));
+
+    if(compra == 0){
+        alertSuccess.classList.add('d-none');
+        alertDanger.classList.remove('d-none');
+    }    
+    else{
+        alertSuccess.classList.remove('d-none');
+        alertDanger.classList.add('d-none');
+        aPagar.innerHTML = compra;
+    }
+  
 })
